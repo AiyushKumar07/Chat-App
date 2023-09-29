@@ -6,6 +6,13 @@
         ".write": "$user_id === auth.uid"
       }
     },
+    "rooms": {
+      ".read": "auth !== null",
+      "$room_id": {
+        ".read": "auth !== null",
+        ".write": "!data.exists() || data.child('admins').child(auth.uid).val() == true"
+      }
+    },
     ".read": false,
     ".write": false
   }
