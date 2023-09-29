@@ -1,5 +1,8 @@
+import { useCurrentRoom } from '../../../context/current-room.context';
+import { memo } from 'react';
 const Top = () => {
-  return <div>Top</div>;
+  const name = useCurrentRoom(v => v.name);
+  return <div>{name}</div>;
 };
 
-export default Top;
+export default memo(Top);
