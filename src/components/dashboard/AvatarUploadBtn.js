@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useProfile } from '../../context/profile.context';
 import AvatarEditor from 'react-avatar-editor';
 import { database, storage } from '../../misc/firebase';
+import ProfileAvatar from '../ProfileAvatar';
 
 const fileInputTypes = '.png, .jpeg, .jpg';
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/pjpeg'];
@@ -71,6 +72,11 @@ const AvatarUploadBtn = () => {
 
   return (
     <div className="mt-3 text-center">
+      <ProfileAvatar
+        src={profile.avatar}
+        name={profile.name}
+        className="width-200 height-200 img-fullsize font-huge"
+      />
       <div>
         <label
           htmlFor="avatar-upload"
