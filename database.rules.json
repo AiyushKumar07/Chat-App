@@ -8,9 +8,19 @@
     },
     "rooms": {
       ".read": "auth !== null",
+      ".write": "auth !== null",
       "$room_id": {
         ".read": "auth !== null",
-        ".write": "!data.exists() || data.child('admins').child(auth.uid).val() == true"
+        ".write": "auth !== null"
+      }
+    },
+    "messages": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
+      ".indexOn": ["roomId", "author/uid"],
+      "$message_id": {
+        ".read": "auth !== null",
+        ".write": "auth !== null"
       }
     },
     ".read": false,
