@@ -2,9 +2,18 @@ import ProfileAvatar from '../../ProfileAvatar';
 import TimeAgo from 'timeago-react';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 import PresenceDot from '../../PresenceDot';
+import { useCurrentRoom } from '../../../context/current-room.context';
+import { auth } from '../../../misc/firebase';
+import { Button } from 'rsuite';
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({ message, handleAdmin }) => {
   const { author, createdAt, text } = message;
+  const isAdmin = useCurrentRoom(v => v.isAdmin);
+  const admins = useCurrentRoom(v => v.admins);
+
+  const isMsgAuthorAdmin = admins.includes(author.uid);
+  const isAuthor = auth.currentUser.uid === author.uid;
+  const canGrantAdmin = isAdmin && !isAuthor;
 
   return (
     <li className="padded mb-1">
@@ -22,7 +31,15 @@ const MessageItem = ({ message }) => {
           profile={author}
           appearance="link"
           className="p-0 ml-1 text-black"
-        />
+        >
+          {canGrantAdmin && (
+            <Button block onClick={() => handleAdmin(author.uid)} color="blue">
+              {isMsgAuthorAdmin
+                ? 'Remove admin permission'
+                : 'Give admin permission'}
+            </Button>
+          )}
+        </ProfileInfoBtnModal>
 
         <TimeAgo
           datetime={new Date(createdAt)}

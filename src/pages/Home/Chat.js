@@ -27,7 +27,7 @@ const Chat = () => {
 
   const isAdmin = admins.includes(auth.currentUser.uid);
 
-  const currentRoomData = { name, description, isAdmin };
+  const currentRoomData = { name, description, admins, isAdmin };
 
   return (
     <CurrentRoomProvider data={currentRoomData}>

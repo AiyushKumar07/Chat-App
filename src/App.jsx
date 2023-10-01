@@ -1,5 +1,4 @@
 import { Switch } from 'react-router-dom';
-
 import 'rsuite/dist/styles/rsuite-default.css';
 import './styles/main.scss';
 import SignIn from './pages/SignIn';
