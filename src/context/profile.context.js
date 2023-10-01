@@ -23,6 +23,7 @@ export const ProfileProvider = ({ children }) => {
 
     const authUnsub = auth.onAuthStateChanged(authObj => {
       if (authObj) {
+        // console.log(authObj.uid);
         userStatusRef = database.ref(`/status/${authObj.uid}`);
 
         userRef = database.ref(`/profiles/${authObj.uid}`);
@@ -49,7 +50,7 @@ export const ProfileProvider = ({ children }) => {
             .then(() => {
               userStatusRef.set(isOnlineForDatabase);
             });
-          console.log(userStatusRef);
+          // console.log(userStatusRef);
         });
       } else {
         if (userRef) {
