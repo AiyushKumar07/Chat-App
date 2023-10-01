@@ -9,7 +9,7 @@ const RoomInfoBtnModal = () => {
   const description = useCurrentRoom(v => v.description);
   return (
     <>
-      <Button appearance="link " className="px-0" onClick={open}>
+      <Button appearance="link" className="px-0" onClick={open}>
         Room Information
       </Button>
       <Modal show={isOpen} onHide={close}>
