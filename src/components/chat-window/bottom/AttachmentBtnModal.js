@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const MAX_FILE_SIZE = 1000 * 1024 * 5;
 
 const AttachmentBtnModal = ({ afterUpload }) => {
-  const chatId = useParams();
+  const { chatId } = useParams();
   const { isOpen, close, open } = useModalState();
 
   const [fileList, setFileList] = useState([]);
@@ -22,6 +22,7 @@ const AttachmentBtnModal = ({ afterUpload }) => {
   };
 
   const onUpload = async () => {
+    setIsLoading(true);
     try {
       const uploadPromises = fileList.map(f => {
         return storage
@@ -46,7 +47,8 @@ const AttachmentBtnModal = ({ afterUpload }) => {
       setIsLoading(false);
       close();
     } catch (err) {
-      Alert.error('Permission Denies : ' + err.message, 4000);
+      setIsLoading(false);
+      Alert.error('Permission Denies : ' + err.message, 400);
     }
   };
 
