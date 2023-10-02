@@ -14,9 +14,7 @@ const DashboardToggle = () => {
       .set(isOfflineForDatabase)
       .then(() => {
         auth.signOut();
-
         Alert.info('Signed Out', 4000);
-
         close();
       })
       .catch(err => {

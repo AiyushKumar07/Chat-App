@@ -43,6 +43,9 @@ const SignIn = () => {
                   <Icon icon="google"> Continue With Google</Icon>
                 </Button>
               </div>
+              <div className="text-center mt-3">
+                * Please use only Google (Facebook is Down)
+              </div>
             </Panel>
           </Col>
         </Row>
