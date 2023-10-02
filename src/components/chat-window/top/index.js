@@ -28,7 +28,7 @@ const Top = () => {
           />
           <span className="text-disappear">{name}</span>
         </h4>
-        <ButtonToolbar className="ws-nowrap" style={{ marginTop: '15px' }}>
+        <ButtonToolbar className="ws-nowrap">
           {isAdmin && <EditRoomBtnDrawer />}
         </ButtonToolbar>
       </div>

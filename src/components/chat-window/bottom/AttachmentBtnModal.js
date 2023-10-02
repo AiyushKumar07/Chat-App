@@ -44,9 +44,11 @@ const AttachmentBtnModal = ({ afterUpload }) => {
 
       const files = await Promise.all(shapePromises);
       await afterUpload(files);
+      setFileList([]);
       setIsLoading(false);
       close();
     } catch (err) {
+      setFileList([]);
       setIsLoading(false);
       Alert.error('Permission Denies : ' + err.message, 400);
     }
