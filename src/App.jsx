@@ -6,16 +6,21 @@ import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import Home from './pages/Home/index';
 import { ProfileProvider } from './context/profile.context';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   return (
     <ProfileProvider>
       <Switch>
         <PublicRoute path="/signin">
-          <SignIn />
+          <ErrorBoundary>
+            <SignIn />
+          </ErrorBoundary>
         </PublicRoute>
         <PrivateRoute path="/">
-          <Home />
+          <ErrorBoundary>
+            <Home />
+          </ErrorBoundary>
         </PrivateRoute>
       </Switch>
     </ProfileProvider>
