@@ -1,8 +1,8 @@
+import React, { useState, useCallback } from 'react';
 import { InputGroup, Icon, Alert } from 'rsuite';
 import { ReactMic } from 'react-mic';
-import { useState, useCallback } from 'react';
+import { useParams } from 'react-router';
 import { storage } from '../../../misc/firebase';
-import { useParams } from 'react-router-dom';
 
 const AudioMsgBtn = ({ afterUpload }) => {
   const { chatId } = useParams();
@@ -19,7 +19,8 @@ const AudioMsgBtn = ({ afterUpload }) => {
       setIsUploading(true);
       try {
         const snap = await storage
-          .ref(`/chat/${chatId}/audio_${Date.now()}.mp3`)
+          .ref(`/chat/${chatId}`)
+          .child(`audio_${Date.now()}.mp3`)
           .put(data.blob, {
             cacheControl: `public, max-age=${3600 * 24 * 3}`,
           });
@@ -32,9 +33,9 @@ const AudioMsgBtn = ({ afterUpload }) => {
 
         setIsUploading(false);
         afterUpload([file]);
-      } catch (err) {
+      } catch (error) {
         setIsUploading(false);
-        Alert.error(err.message, 400);
+        Alert.error(error.message);
       }
     },
     [afterUpload, chatId]

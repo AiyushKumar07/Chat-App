@@ -1,10 +1,12 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { database } from './firebase';
 
 export function useModalState(defaultValue = false) {
   const [isOpen, setIsOpen] = useState(defaultValue);
+
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
+
   return { isOpen, open, close };
 }
 
@@ -35,6 +37,7 @@ export function usePresence(uid) {
     userStatusRef.on('value', snap => {
       if (snap.exists()) {
         const data = snap.val();
+
         setPresence(data);
       }
     });
@@ -43,20 +46,21 @@ export function usePresence(uid) {
       userStatusRef.off();
     };
   }, [uid]);
+
   return presence;
 }
 
 export function useHover() {
-  const [isHovered, setIsHovered] = useState(false);
+  const [value, setValue] = useState(false);
 
-  const elementRef = useRef(null);
+  const ref = useRef(null);
 
-  const handleMouseOver = () => setIsHovered(true);
-  const handleMouseOut = () => setIsHovered(false);
+  const handleMouseOver = () => setValue(true);
+  const handleMouseOut = () => setValue(false);
 
   useEffect(
     () => {
-      const node = elementRef.current;
+      const node = ref.current;
       if (node) {
         node.addEventListener('mouseover', handleMouseOver);
         node.addEventListener('mouseout', handleMouseOut);
@@ -67,8 +71,8 @@ export function useHover() {
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [elementRef.current] // Recall only if ref changes
+    [ref.current] // Recall only if ref changes
   );
 
-  return [elementRef, isHovered];
+  return [ref, value];
 }

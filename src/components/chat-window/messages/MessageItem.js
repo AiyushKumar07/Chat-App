@@ -1,37 +1,30 @@
-import ProfileAvatar from '../../ProfileAvatar';
+import React, { memo } from 'react';
 import TimeAgo from 'timeago-react';
+import { Button } from 'rsuite';
+import ProfileAvatar from '../../ProfileAvatar';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 import PresenceDot from '../../PresenceDot';
 import { useCurrentRoom } from '../../../context/current-room.context';
 import { auth } from '../../../misc/firebase';
-import { Button } from 'rsuite';
-import { useHover } from '../../../misc/custom-hooks';
+import { useHover, useMediaQuery } from '../../../misc/custom-hooks';
 import IconBtnControl from './IconBtnControl';
-import { useMediaQuery } from '../../../misc/custom-hooks';
-import ImageBtnModal from './ImageBtnModal';
+import ImgBtnModal from './ImgBtnModal';
 
 const renderFileMessage = file => {
   if (file.contentType.includes('image')) {
     return (
       <div className="height-220">
-        <ImageBtnModal src={file.url} fileName={file.name} />
+        <ImgBtnModal src={file.url} fileName={file.name} />
       </div>
     );
   }
+
   if (file.contentType.includes('audio')) {
     return (
       <audio controls>
         <source src={file.url} type="audio/mp3" />
-        Your Browser Does not support audio element.
+        Your browser does not support the audio element.
       </audio>
-    );
-  }
-  if (file.contentType.includes('video')) {
-    return (
-      <video controls style={{ width: '300px', height: '500px' }}>
-        <source src={file.url} type="video/mp4" />
-        Your Browser Does not support video element.
-      </video>
     );
   }
 
@@ -78,15 +71,15 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
             <Button block onClick={() => handleAdmin(author.uid)} color="blue">
               {isMsgAuthorAdmin
                 ? 'Remove admin permission'
-                : 'Give admin permission'}
+                : 'Give admin in this room'}
             </Button>
           )}
         </ProfileInfoBtnModal>
-
         <TimeAgo
-          datetime={new Date(createdAt)}
+          datetime={createdAt}
           className="font-normal text-black-45 ml-2"
         />
+
         <IconBtnControl
           {...(isLiked ? { color: 'red' } : {})}
           isVisible={canShowIcons}
@@ -104,12 +97,13 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
           />
         )}
       </div>
+
       <div>
-        {text && <span className="word-break-all">{text}</span>}
+        {text && <span className="word-breal-all">{text}</span>}
         {file && renderFileMessage(file)}
       </div>
     </li>
   );
 };
 
-export default MessageItem;
+export default memo(MessageItem);

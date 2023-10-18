@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Input, InputGroup, Icon, Alert } from 'rsuite';
 
 const EditableInput = ({
@@ -27,7 +27,6 @@ const EditableInput = ({
 
     if (trimmed === '') {
       Alert.info(emptyMsg, 4000);
-      return;
     }
 
     if (trimmed !== initialValue) {

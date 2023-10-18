@@ -1,8 +1,10 @@
-export function getNameInitiails(name) {
+export function getNameInitials(name) {
   const splitName = name.toUpperCase().split(' ');
+
   if (splitName.length > 1) {
     return splitName[0][0] + splitName[1][0];
   }
+
   return splitName[0][0];
 }
 
@@ -34,7 +36,6 @@ export async function getUserUpdates(userId, keyToUpdate, value, db) {
     .orderByChild('lastMessage/author/uid')
     .equalTo(userId)
     .once('value');
-  // Index not defined, add ".indexOn": "author/uid", for path "/messages", to the rules
 
   const [mSnap, rSnap] = await Promise.all([getMsgs, getRooms]);
 
@@ -52,10 +53,13 @@ export async function getUserUpdates(userId, keyToUpdate, value, db) {
 export function groupBy(array, groupingKeyFn) {
   return array.reduce((result, item) => {
     const groupingKey = groupingKeyFn(item);
+
     if (!result[groupingKey]) {
       result[groupingKey] = [];
     }
+
     result[groupingKey].push(item);
+
     return result;
   }, {});
 }

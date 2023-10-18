@@ -1,3 +1,4 @@
+import React from 'react';
 import { Badge, Whisper, Tooltip, IconButton, Icon } from 'rsuite';
 
 const ConditionalBadge = ({ condition, children }) => {

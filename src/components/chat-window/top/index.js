@@ -1,7 +1,7 @@
-import { ButtonToolbar, Icon } from 'rsuite';
-import { useCurrentRoom } from '../../../context/current-room.context';
-import { memo } from 'react';
+import React, { memo } from 'react';
+import { Icon, ButtonToolbar } from 'rsuite';
 import { Link } from 'react-router-dom';
+import { useCurrentRoom } from '../../../context/current-room.context';
 import { useMediaQuery } from '../../../misc/custom-hooks';
 import RoomInfoBtnModal from './RoomInfoBtnModal';
 import EditRoomBtnDrawer from './EditRoomBtnDrawer';
@@ -13,7 +13,7 @@ const Top = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-item-center">
+      <div className="d-flex justify-content-between align-items-center">
         <h4 className="text-disappear d-flex align-items-center">
           <Icon
             componentClass={Link}
@@ -28,12 +28,14 @@ const Top = () => {
           />
           <span className="text-disappear">{name}</span>
         </h4>
+
         <ButtonToolbar className="ws-nowrap">
           {isAdmin && <EditRoomBtnDrawer />}
         </ButtonToolbar>
       </div>
+
       <div className="d-flex justify-content-between align-items-center">
-        <span></span>
+        <span>todo</span>
         <RoomInfoBtnModal />
       </div>
     </div>

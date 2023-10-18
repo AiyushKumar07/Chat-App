@@ -1,23 +1,24 @@
+import React, { useState, useCallback, useRef } from 'react';
 import {
-  Alert,
   Button,
-  ControlLabel,
-  Form,
-  FormControl,
-  FormGroup,
   Icon,
   Modal,
+  Form,
+  ControlLabel,
+  FormControl,
+  FormGroup,
   Schema,
+  Alert,
 } from 'rsuite';
+import firebase from 'firebase/app';
 import { useModalState } from '../misc/custom-hooks';
-import { useCallback, useRef, useState } from 'react';
+import { database, auth } from '../misc/firebase';
+
 const { StringType } = Schema.Types;
-import firebase from 'firebase';
-import { auth, database } from '../misc/firebase';
 
 const model = Schema.Model({
-  name: StringType().isRequired('Chat Name is Required'),
-  description: StringType().isRequired('Description is Required'),
+  name: StringType().isRequired('Chat name is required'),
+  description: StringType().isRequired('Description is required'),
 });
 
 const INITIAL_FORM = {
@@ -27,6 +28,7 @@ const INITIAL_FORM = {
 
 const CreateRoomBtnModal = () => {
   const { isOpen, open, close } = useModalState();
+
   const [formValue, setFormValue] = useState(INITIAL_FORM);
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef();
@@ -39,17 +41,22 @@ const CreateRoomBtnModal = () => {
     if (!formRef.current.check()) {
       return;
     }
+
     setIsLoading(true);
-    const newRoomData = {
+
+    const newRoomdata = {
       ...formValue,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
       admins: {
         [auth.currentUser.uid]: true,
       },
     };
+
     try {
-      await database.ref('rooms').push(newRoomData);
+      await database.ref('rooms').push(newRoomdata);
+
       Alert.info(`${formValue.name} has been created`, 4000);
+
       setIsLoading(false);
       setFormValue(INITIAL_FORM);
       close();
@@ -67,7 +74,7 @@ const CreateRoomBtnModal = () => {
 
       <Modal show={isOpen} onHide={close}>
         <Modal.Header>
-          <Modal.Title>New Chat Room</Modal.Title>
+          <Modal.Title>New chat room</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form
@@ -78,11 +85,12 @@ const CreateRoomBtnModal = () => {
             ref={formRef}
           >
             <FormGroup>
-              <ControlLabel>Room Name</ControlLabel>
+              <ControlLabel>Room name</ControlLabel>
               <FormControl name="name" placeholder="Enter chat room name..." />
             </FormGroup>
+
             <FormGroup>
-              <ControlLabel>Room Description</ControlLabel>
+              <ControlLabel>Description</ControlLabel>
               <FormControl
                 componentClass="textarea"
                 rows={5}
@@ -99,7 +107,7 @@ const CreateRoomBtnModal = () => {
             onClick={onSubmit}
             disabled={isLoading}
           >
-            Create New Chat Room
+            Create new chat room
           </Button>
         </Modal.Footer>
       </Modal>

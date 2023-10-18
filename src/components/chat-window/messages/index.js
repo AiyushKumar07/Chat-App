@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { auth, database, storage } from '../../../misc/firebase';
-import { groupBy, transformToArrWithId } from '../../../misc/helpers';
-import MessageItem from './MessageItem';
+/* eslint-disable consistent-return */
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useParams } from 'react-router';
 import { Alert, Button } from 'rsuite';
+import { database, auth, storage } from '../../../misc/firebase';
+import { transformToArrWithId, groupBy } from '../../../misc/helpers';
+import MessageItem from './MessageItem';
 
 const PAGE_SIZE = 15;
 const messagesRef = database.ref('/messages');
@@ -27,6 +28,7 @@ const Messages = () => {
   const loadMessages = useCallback(
     limitToLast => {
       const node = selfRef.current;
+
       messagesRef.off();
 
       messagesRef
@@ -35,12 +37,13 @@ const Messages = () => {
         .limitToLast(limitToLast || PAGE_SIZE)
         .on('value', snap => {
           const data = transformToArrWithId(snap.val());
-
           setMessages(data);
+
           if (shouldScrollToBottom(node)) {
             node.scrollTop = node.scrollHeight;
           }
         });
+
       setLimit(p => p + PAGE_SIZE);
     },
     [chatId]
@@ -74,21 +77,24 @@ const Messages = () => {
 
   const handleAdmin = useCallback(
     async uid => {
-      const adminRef = database.ref(`/rooms/${chatId}/admins`);
+      const adminsRef = database.ref(`/rooms/${chatId}/admins`);
+
       let alertMsg;
-      await adminRef.transaction(admins => {
+
+      await adminsRef.transaction(admins => {
         if (admins) {
           if (admins[uid]) {
             admins[uid] = null;
-            alertMsg = 'Admin Permission Removed';
+            alertMsg = 'Admin permission removed';
           } else {
             admins[uid] = true;
-            alertMsg = 'Admin Permission Granted';
+            alertMsg = 'Admin permission granted';
           }
         }
-        console.log(admins);
+
         return admins;
       });
+
       Alert.info(alertMsg, 4000);
     },
     [chatId]
@@ -126,9 +132,11 @@ const Messages = () => {
 
   const handleDelete = useCallback(
     async (msgId, file) => {
-      if (!window.confirm('Delete this message')) {
+      // eslint-disable-next-line no-alert
+      if (!window.confirm('Delete this message?')) {
         return;
       }
+
       const isLast = messages[messages.length - 1].id === msgId;
 
       const updates = {};
@@ -148,16 +156,15 @@ const Messages = () => {
 
       try {
         await database.ref().update(updates);
-        Alert.info('Message has been Deleted');
+
+        Alert.info('Message has been deleted');
       } catch (err) {
         return Alert.error(err.message);
       }
+
       if (file) {
         try {
           const fileRef = storage.refFromURL(file.url);
-          console.log(file.url);
-          console.log(fileRef);
-
           await fileRef.delete();
         } catch (err) {
           Alert.error(err.message);
@@ -172,25 +179,28 @@ const Messages = () => {
       new Date(item.createdAt).toDateString()
     );
 
-    let items = [];
+    const items = [];
+
     Object.keys(groups).forEach(date => {
       items.push(
         <li key={date} className="text-center mb-1 padded">
           {date}
         </li>
       );
+
       const msgs = groups[date].map(msg => (
         <MessageItem
           key={msg.id}
           message={msg}
-          handleLike={handleLike}
           handleAdmin={handleAdmin}
+          handleLike={handleLike}
           handleDelete={handleDelete}
         />
       ));
 
       items.push(...msgs);
     });
+
     return items;
   };
 

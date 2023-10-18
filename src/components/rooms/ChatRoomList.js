@@ -1,7 +1,9 @@
-import { Loader, Nav } from 'rsuite';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Nav, Loader } from 'rsuite';
 import RoomItem from './RoomItem';
 import { useRooms } from '../../context/rooms.context';
-import { Link, useLocation } from 'react-router-dom';
+
 const ChatRoomList = ({ aboveElHeight }) => {
   const rooms = useRooms();
   const location = useLocation();
@@ -18,7 +20,7 @@ const ChatRoomList = ({ aboveElHeight }) => {
       activeKey={location.pathname}
     >
       {!rooms && (
-        <Loader center vertical content="Loading..." speed="slow" size="md" />
+        <Loader center vertical content="Loading" speed="slow" size="md" />
       )}
       {rooms &&
         rooms.length > 0 &&
