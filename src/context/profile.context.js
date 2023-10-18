@@ -17,6 +17,7 @@ const ProfileContext = createContext();
 export const ProfileProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     let userRef;
     let userStatusRef;
